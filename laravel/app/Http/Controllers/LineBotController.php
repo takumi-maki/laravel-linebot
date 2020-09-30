@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Gurunavi;
+
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Log;
@@ -18,7 +20,7 @@ class LineBotController extends Controller
         return view('linebot.index');
     }
     
-    public function parrot(Request $request)
+    public function restaurants(Request $request)
     {
         Log::debug($request->header());
         Log::debug($request->input());
@@ -43,9 +45,29 @@ class LineBotController extends Controller
                  Log::debug('Non text message has come');
                  continue;
              }
+             $gurunavi = new Gurunavi();
+            //  検索結果を$gurunaviResponseに代入
+             $gurunaviResponse = $gurunavi->searchRestaurants($event->getText());
+
+            //  検索結果がエラーであった場合
+             if(array_key_exists('error', $gurunaviResponse)){
+                 $replyText = $gurunaviResponse['error'][0]['message'];
+                 $replyToken = $event->getReplyToken();
+                 $lineBot->replyText($replyToken,$replyText);
+                 continue;
+             }
+
+            $replyText = '';
+            foreach($gurunaviResponse['rest'] as $restaurant){
+                $replyText .=
+                $restaurant['name']."\n".
+                $restaurant['url']."\n". 
+                "\n";
+            }
+
              $replyToken = $event->getReplyToken();
              
-             $replyText = $event->getText();
+            //  $replyText = $event->getText();
             //  LINEBotクラスのreplyTextメソッドで、テキストメッセージでの返信が行われる。第一引数には応答トークンを、第二引数には返信内容のテキストを渡す
              $lineBot->replyText($replyToken, $replyText);
          }
