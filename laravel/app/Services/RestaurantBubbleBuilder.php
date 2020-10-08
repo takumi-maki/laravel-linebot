@@ -33,7 +33,7 @@ class RestaurantBubbleBuilder implements ContainerBuilder
         $this->minutesByFoot = Arr::get($restaurant, 'access.walk', null);
         $this->category = Arr::get($restaurant, 'category', null);
         $this->budget = Arr::get($restaurant, 'budget', null);
-        $this->latitube = Arr::get($restaurant, 'latitube', null);
+        $this->latitude = Arr::get($restaurant, 'latitude', null);
         $this->longitude = Arr::get($restaurant, 'longitude', null);
         $this->phoneNumber = Arr::get($restaurant, 'tel', null);
         $this->restaurantUrl = Arr::get($restaurant, 'url', null);
