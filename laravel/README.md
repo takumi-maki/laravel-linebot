@@ -1,4 +1,4 @@
 # 飲食店検索
 「ぐるなび」との連携
 ---
-![LINE画面](line.png)
+![LINE画面](linebot.png)
